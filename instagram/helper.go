@@ -43,5 +43,13 @@ func parseNumber(part string) (int, error) {
 		}
 		return int(value * 1000), nil
 	}
+	if strings.HasSuffix(numberStr, "M") {
+		numberStr = strings.TrimSuffix(numberStr, "M")
+		value, err := strconv.ParseFloat(numberStr, 64)
+		if err != nil {
+			return 0, err
+		}
+		return int(value * 1000000), nil
+	}
 	return strconv.Atoi(numberStr)
 }
