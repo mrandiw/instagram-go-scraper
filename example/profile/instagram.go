@@ -13,9 +13,10 @@ func main() {
 	Instagram := instagram.NewInstagram(ig)
 
 	User := Instagram.GetFullBio("mrandiw")
-	fmt.Println(User.Title)
-	fmt.Println(User.Bio)
-	fmt.Println(User.Followers)
-	fmt.Println(User.Following)
-	fmt.Println(User.Post)
+	fmt.Println("Name : ", User.Title)
+	fmt.Println("Bio :", User.Bio)
+	fmt.Println("Followers :", User.Followers)
+	fmt.Println("Following :", User.Following)
+	fmt.Println("Post :", User.Post)
+	fmt.Println("Photo Profile :", User.PhotoProfile)
 }

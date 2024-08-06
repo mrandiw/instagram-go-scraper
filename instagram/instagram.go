@@ -12,6 +12,7 @@ import (
 type (
 	ModuleInstagram interface {
 		visit(username string)
+		getPhotoProfile()
 		getTitle()
 		getBio()
 		GetFullBio(username string) InstagramProfile
@@ -24,11 +25,12 @@ type (
 
 	// InstagramProfile holds the scraped data
 	InstagramProfile struct {
-		Title     string
-		Bio       string
-		Followers int
-		Following int
-		Post      int
+		Title        string
+		Bio          string
+		Followers    int
+		Following    int
+		Post         int
+		PhotoProfile string
 	}
 )
 
@@ -58,6 +60,17 @@ func (module *moduleInstagram) visit(username string) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func (module *moduleInstagram) getPhotoProfile() {
+
+	// Find and print title bio
+	module.c.OnHTML("meta[property=\"og:image\"]", func(e *colly.HTMLElement) {
+
+		photo := e.Attr("content")
+
+		module.InstagramProfile.PhotoProfile = photo
+	})
 }
 
 func (module *moduleInstagram) getTitle() {
@@ -110,6 +123,7 @@ func (module *moduleInstagram) getBio() {
 			module.InstagramProfile.Following = bioFollower.Following
 			module.InstagramProfile.Post = bioFollower.Post
 		} else {
+			module.InstagramProfile.Bio = ""
 			module.InstagramProfile.Followers = 0
 			module.InstagramProfile.Following = 0
 			module.InstagramProfile.Post = 0
@@ -126,6 +140,9 @@ func (module *moduleInstagram) GetFullBio(username string) InstagramProfile {
 	// get bio
 	module.getBio()
 
+	// get profile photo
+	module.getPhotoProfile()
+
 	// Error handling
 	module.c.OnError(func(r *colly.Response, err error) {
 		log.Println("Request URL:", r.Request.URL, "failed with response:", r, "\nError:", err)
@@ -135,11 +152,12 @@ func (module *moduleInstagram) GetFullBio(username string) InstagramProfile {
 	module.visit(username)
 
 	profile := InstagramProfile{
-		Title:     module.InstagramProfile.Title,
-		Bio:       module.InstagramProfile.Bio,
-		Followers: module.InstagramProfile.Followers,
-		Following: module.InstagramProfile.Following,
-		Post:      module.InstagramProfile.Post,
+		Title:        module.InstagramProfile.Title,
+		Bio:          module.InstagramProfile.Bio,
+		Followers:    module.InstagramProfile.Followers,
+		Following:    module.InstagramProfile.Following,
+		Post:         module.InstagramProfile.Post,
+		PhotoProfile: module.InstagramProfile.PhotoProfile,
 	}
 
 	return profile
