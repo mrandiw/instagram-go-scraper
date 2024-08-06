@@ -15,6 +15,8 @@ type (
 		getPhotoProfile()
 		getTitle()
 		getBio()
+
+		// Get Instagram Bio : Name, Bio, Profile Photo, Followers, dll
 		GetFullBio(username string) InstagramProfile
 	}
 

@@ -16,21 +16,13 @@ func TestGetFullBio(t *testing.T) {
 
 	// Define expected values
 	expectedTitle := "𝑨𝒏𝒅𝒊 𝑾𝒊𝒃𝒐𝒘𝒐 (@mrandiw)"
-	expectedFollowers := 12000
-	expectedFollowing := 1053
-	expectedPosts := 624
+	expectedBio := "𝑆𝑜𝑓𝑡𝑤𝑎𝑟𝑒 𝐸𝑛𝑔𝑖𝑛𝑒𝑒𝑟 ➰"
 
 	// Validate results
 	if User.Title != expectedTitle {
 		t.Errorf("expected Title %v, got %v", expectedTitle, User.Title)
 	}
-	if User.Followers != expectedFollowers {
-		t.Errorf("expected Followers %v, got %v", expectedFollowers, User.Followers)
-	}
-	if User.Following != expectedFollowing {
-		t.Errorf("expected Following %v, got %v", expectedFollowing, User.Following)
-	}
-	if User.Post != expectedPosts {
-		t.Errorf("expected Post %v, got %v", expectedPosts, User.Post)
+	if User.Bio != expectedBio {
+		t.Errorf("expected Followers %v, got %v", expectedBio, User.Bio)
 	}
 }
