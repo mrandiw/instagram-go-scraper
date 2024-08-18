@@ -5,7 +5,7 @@ go 1.21
 require (
 	github.com/chromedp/chromedp v0.10.0
 	github.com/gocolly/colly/v2 v2.1.0
-	github.com/jarcoal/httpmock v1.3.1
+	gotest.tools v2.2.0+incompatible
 )
 
 require (
@@ -22,9 +22,11 @@ require (
 	github.com/gobwas/ws v1.4.0 // indirect
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
 	github.com/golang/protobuf v1.4.2 // indirect
+	github.com/google/go-cmp v0.4.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/kennygrant/sanitize v1.2.4 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
 	github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca // indirect
 	github.com/temoto/robotstxt v1.1.1 // indirect
 	golang.org/x/net v0.0.0-20200602114024-627f9648deb9 // indirect
