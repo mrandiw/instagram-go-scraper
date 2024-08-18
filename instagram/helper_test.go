@@ -47,6 +47,16 @@ func TestParseFollowers(t *testing.T) {
 			expected:    InstagramProfile{},
 			expectError: true,
 		},
+		{
+			input:       "1,200 followers, invalid following, 150 posts",
+			expected:    InstagramProfile{},
+			expectError: true,
+		},
+		{
+			input:       "1,200 followers, 300 following, invalid posts",
+			expected:    InstagramProfile{},
+			expectError: true,
+		},
 	}
 
 	for _, tt := range tests {

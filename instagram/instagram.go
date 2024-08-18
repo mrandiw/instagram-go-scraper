@@ -2,7 +2,6 @@ package instagram
 
 import (
 	"fmt"
-	"log"
 	"regexp"
 	"strings"
 
@@ -58,10 +57,7 @@ func Init() *colly.Collector {
 func (module *moduleInstagram) visit(username string) {
 	// Replace 'username' with the actual Instagram username
 	profileURL := fmt.Sprintf("https://www.instagram.com/%s/", username)
-	err := module.c.Visit(profileURL)
-	if err != nil {
-		log.Fatal(err)
-	}
+	module.c.Visit(profileURL)
 }
 
 func (module *moduleInstagram) getPhotoProfile() {
@@ -83,12 +79,12 @@ func (module *moduleInstagram) getTitle() {
 		title := e.Attr("content")
 
 		end := strings.Index(title, "•")
+
+		module.InstagramProfile.Title = ""
 		if end != -1 {
 			result := title[:end]
 
 			module.InstagramProfile.Title = strings.TrimSpace(result)
-		} else {
-			module.InstagramProfile.Title = ""
 		}
 	})
 }
@@ -110,25 +106,22 @@ func (module *moduleInstagram) getBio() {
 		}
 
 		end := strings.Index(bio, "-")
+
+		module.InstagramProfile.Bio = ""
+		module.InstagramProfile.Followers = 0
+		module.InstagramProfile.Following = 0
+		module.InstagramProfile.Post = 0
 		if end != -1 {
 			result := bio[:end]
 
 			// parse follower
-			bioFollower, err := parseFollowers(strings.TrimSpace(result))
-			if err != nil {
-				log.Fatal(err)
-			}
+			bioFollower, _ := parseFollowers(strings.TrimSpace(result))
 
 			// assign value
 			module.InstagramProfile.Bio = bioDesc
 			module.InstagramProfile.Followers = bioFollower.Followers
 			module.InstagramProfile.Following = bioFollower.Following
 			module.InstagramProfile.Post = bioFollower.Post
-		} else {
-			module.InstagramProfile.Bio = ""
-			module.InstagramProfile.Followers = 0
-			module.InstagramProfile.Following = 0
-			module.InstagramProfile.Post = 0
 		}
 	})
 
@@ -144,11 +137,6 @@ func (module *moduleInstagram) GetFullBio(username string) InstagramProfile {
 
 	// get profile photo
 	module.getPhotoProfile()
-
-	// Error handling
-	module.c.OnError(func(r *colly.Response, err error) {
-		log.Println("Request URL:", r.Request.URL, "failed with response:", r, "\nError:", err)
-	})
 
 	// Replace 'username' with the actual Instagram username
 	module.visit(username)

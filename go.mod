@@ -4,6 +4,7 @@ go 1.21
 
 require (
 	github.com/chromedp/chromedp v0.10.0
+	github.com/gocolly/colly v1.2.0
 	github.com/gocolly/colly/v2 v2.1.0
 	gotest.tools v2.2.0+incompatible
 )
