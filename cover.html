@@ -1,0 +1,402 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>gallery: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/MrAndiw/instagram-go-scraper/example/gallery/gallery.go (0.0%)</option>
+				
+				<option value="file1">github.com/MrAndiw/instagram-go-scraper/example/profile/instagram.go (0.0%)</option>
+				
+				<option value="file2">github.com/MrAndiw/instagram-go-scraper/instagram/helper.go (85.7%)</option>
+				
+				<option value="file3">github.com/MrAndiw/instagram-go-scraper/instagram/instagram.go (82.6%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package main
+
+import (
+        "context"
+        "fmt"
+        "log"
+        "time"
+
+        "github.com/chromedp/chromedp"
+)
+
+type InstagramPhoto struct {
+        URL   string
+        Alt   string
+        Thumb string
+}
+
+func main() <span class="cov0" title="0">{
+        // Create a new context
+        ctx, cancel := chromedp.NewContext(context.Background())
+        defer cancel()
+
+        // Navigate to the Instagram profile page
+        username := "mrandiw"
+        profileURL := fmt.Sprintf("https://www.instagram.com/%s/", username)
+
+        var photos []InstagramPhoto
+
+        // Run the chromedp tasks
+        err := chromedp.Run(ctx,
+                chromedp.Navigate(profileURL),
+                chromedp.Sleep(5*time.Second), // Wait for the page to load
+                chromedp.EvaluateAsDevTools(`Array.from(document.querySelectorAll('article img')).map(img =&gt; ({url: img.src, alt: img.alt, thumb: img.srcset.split(",")[0].split(" ")[0]}))`, &amp;photos),
+        )
+
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatal(err)
+        }</span>
+
+        // Print the fetched photo data
+        <span class="cov0" title="0">for _, photo := range photos </span><span class="cov0" title="0">{
+                fmt.Printf("Photo URL: %s\nAlt Text: %s\nThumbnail: %s\n\n", photo.URL, photo.Alt, photo.Thumb)
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package main
+
+import (
+        "fmt"
+
+        "github.com/MrAndiw/instagram-go-scraper/instagram"
+)
+
+func main() <span class="cov0" title="0">{
+        // Instantiate default collector
+        ig := instagram.Init()
+
+        Instagram := instagram.NewInstagram(ig)
+
+        User := Instagram.GetFullBio("wendywalters")
+        fmt.Println("Name : ", User.Title)
+        fmt.Println("Bio :", User.Bio)
+        fmt.Println("Followers :", User.Followers)
+        fmt.Println("Following :", User.Following)
+        fmt.Println("Post :", User.Post)
+        fmt.Println("Photo Profile :", User.PhotoProfile)
+}</span>
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package instagram
+
+import (
+        "fmt"
+        "strconv"
+        "strings"
+)
+
+// Parse the string and return the struct
+func parseFollowers(input string) (InstagramProfile, error) <span class="cov8" title="1">{
+        parts := strings.Split(input, ", ")
+        if len(parts) != 3 </span><span class="cov8" title="1">{
+                return InstagramProfile{}, fmt.Errorf("input string does not have exactly 3 parts")
+        }</span>
+
+        <span class="cov8" title="1">followers, err := parseNumber(parts[0])
+        if err != nil </span><span class="cov8" title="1">{
+                return InstagramProfile{}, err
+        }</span>
+
+        <span class="cov8" title="1">following, err := parseNumber(parts[1])
+        if err != nil </span><span class="cov0" title="0">{
+                return InstagramProfile{}, err
+        }</span>
+
+        <span class="cov8" title="1">posts, err := parseNumber(parts[2])
+        if err != nil </span><span class="cov0" title="0">{
+                return InstagramProfile{}, err
+        }</span>
+
+        <span class="cov8" title="1">return InstagramProfile{Followers: followers, Following: following, Post: posts}, nil</span>
+}
+
+// Helper function to parse the numbers and handle 'K' suffix
+func parseNumber(part string) (int, error) <span class="cov8" title="1">{
+        numberStr := strings.Fields(part)[0]
+        numberStr = strings.ReplaceAll(numberStr, ",", "")
+        if strings.HasSuffix(numberStr, "K") </span><span class="cov8" title="1">{
+                numberStr = strings.TrimSuffix(numberStr, "K")
+                value, err := strconv.ParseFloat(numberStr, 64)
+                if err != nil </span><span class="cov0" title="0">{
+                        return 0, err
+                }</span>
+                <span class="cov8" title="1">return int(value * 1000), nil</span>
+        }
+        <span class="cov8" title="1">if strings.HasSuffix(numberStr, "M") </span><span class="cov8" title="1">{
+                numberStr = strings.TrimSuffix(numberStr, "M")
+                value, err := strconv.ParseFloat(numberStr, 64)
+                if err != nil </span><span class="cov0" title="0">{
+                        return 0, err
+                }</span>
+                <span class="cov8" title="1">return int(value * 1000000), nil</span>
+        }
+        <span class="cov8" title="1">return strconv.Atoi(numberStr)</span>
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package instagram
+
+import (
+        "fmt"
+        "log"
+        "regexp"
+        "strings"
+
+        "github.com/gocolly/colly/v2"
+)
+
+type (
+        ModuleInstagram interface {
+                visit(username string)
+                getPhotoProfile()
+                getTitle()
+                getBio()
+
+                // Get Instagram Bio : Name, Bio, Profile Photo, Followers, dll
+                GetFullBio(username string) InstagramProfile
+        }
+
+        moduleInstagram struct {
+                c                *colly.Collector
+                InstagramProfile InstagramProfile
+        }
+
+        // InstagramProfile holds the scraped data
+        InstagramProfile struct {
+                Title        string
+                Bio          string
+                Followers    int
+                Following    int
+                Post         int
+                PhotoProfile string
+        }
+)
+
+var (
+        Title = ""
+)
+
+func NewInstagram(c *colly.Collector) ModuleInstagram <span class="cov8" title="1">{
+        return &amp;moduleInstagram{
+                c: c,
+        }
+}</span>
+
+func Init() *colly.Collector <span class="cov8" title="1">{
+        // Instantiate default collector
+        c := colly.NewCollector(
+                colly.AllowedDomains("instagram.com", "www.instagram.com"),
+        )
+
+        return c
+}</span>
+
+func (module *moduleInstagram) visit(username string) <span class="cov8" title="1">{
+        // Replace 'username' with the actual Instagram username
+        profileURL := fmt.Sprintf("https://www.instagram.com/%s/", username)
+        err := module.c.Visit(profileURL)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatal(err)
+        }</span>
+}
+
+func (module *moduleInstagram) getPhotoProfile() <span class="cov8" title="1">{
+
+        // Find and print title bio
+        module.c.OnHTML("meta[property=\"og:image\"]", func(e *colly.HTMLElement) </span><span class="cov8" title="1">{
+
+                photo := e.Attr("content")
+
+                module.InstagramProfile.PhotoProfile = photo
+        }</span>)
+}
+
+func (module *moduleInstagram) getTitle() <span class="cov8" title="1">{
+
+        // Find and print title bio
+        module.c.OnHTML("meta[property=\"og:title\"]", func(e *colly.HTMLElement) </span><span class="cov8" title="1">{
+
+                title := e.Attr("content")
+
+                end := strings.Index(title, "•")
+                if end != -1 </span><span class="cov8" title="1">{
+                        result := title[:end]
+
+                        module.InstagramProfile.Title = strings.TrimSpace(result)
+                }</span> else<span class="cov0" title="0"> {
+                        module.InstagramProfile.Title = ""
+                }</span>
+        })
+}
+
+func (module *moduleInstagram) getBio() <span class="cov8" title="1">{
+
+        // Find and print bio and other details
+        module.c.OnHTML("meta[name=\"description\"]", func(e *colly.HTMLElement) </span><span class="cov8" title="1">{
+
+                bio := e.Attr("content")
+
+                // parse bio desc
+                re := regexp.MustCompile(`"([^"]+)"`)
+                match := re.FindStringSubmatch(bio)
+
+                bioDesc := ""
+                if len(match) &gt; 1 </span><span class="cov8" title="1">{
+                        bioDesc = match[1]
+                }</span>
+
+                <span class="cov8" title="1">end := strings.Index(bio, "-")
+                if end != -1 </span><span class="cov8" title="1">{
+                        result := bio[:end]
+
+                        // parse follower
+                        bioFollower, err := parseFollowers(strings.TrimSpace(result))
+                        if err != nil </span><span class="cov0" title="0">{
+                                log.Fatal(err)
+                        }</span>
+
+                        // assign value
+                        <span class="cov8" title="1">module.InstagramProfile.Bio = bioDesc
+                        module.InstagramProfile.Followers = bioFollower.Followers
+                        module.InstagramProfile.Following = bioFollower.Following
+                        module.InstagramProfile.Post = bioFollower.Post</span>
+                } else<span class="cov0" title="0"> {
+                        module.InstagramProfile.Bio = ""
+                        module.InstagramProfile.Followers = 0
+                        module.InstagramProfile.Following = 0
+                        module.InstagramProfile.Post = 0
+                }</span>
+        })
+
+}
+
+func (module *moduleInstagram) GetFullBio(username string) InstagramProfile <span class="cov8" title="1">{
+
+        // get title
+        module.getTitle()
+
+        // get bio
+        module.getBio()
+
+        // get profile photo
+        module.getPhotoProfile()
+
+        // Error handling
+        module.c.OnError(func(r *colly.Response, err error) </span><span class="cov0" title="0">{
+                log.Println("Request URL:", r.Request.URL, "failed with response:", r, "\nError:", err)
+        }</span>)
+
+        // Replace 'username' with the actual Instagram username
+        <span class="cov8" title="1">module.visit(username)
+
+        profile := InstagramProfile{
+                Title:        module.InstagramProfile.Title,
+                Bio:          module.InstagramProfile.Bio,
+                Followers:    module.InstagramProfile.Followers,
+                Following:    module.InstagramProfile.Following,
+                Post:         module.InstagramProfile.Post,
+                PhotoProfile: module.InstagramProfile.PhotoProfile,
+        }
+
+        return profile</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>
