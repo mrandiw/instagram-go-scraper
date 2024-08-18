@@ -12,7 +12,7 @@ func main() {
 
 	Instagram := instagram.NewInstagram(ig)
 
-	User := Instagram.GetFullBio("wendywalters")
+	User := Instagram.GetFullBio("ariescarlas")
 	fmt.Println("Name : ", User.Title)
 	fmt.Println("Bio :", User.Bio)
 	fmt.Println("Followers :", User.Followers)
