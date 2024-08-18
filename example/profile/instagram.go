@@ -1,4 +1,4 @@
-package main
+package profile
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"github.com/MrAndiw/instagram-go-scraper/instagram"
 )
 
-func main() {
+func GetProfileExample() {
 	// Instantiate default collector
 	ig := instagram.Init()
 
