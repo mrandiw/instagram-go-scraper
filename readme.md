@@ -7,7 +7,7 @@
 
 # Instagram Go Scraper
 
-`instagram-go-scraper` is a Go library for scraping Instagram user profiles. It allows you to fetch details such as bio, followers count, following count, and the number of posts from Instagram profiles.
+`instagram-go-scraper` is a Go library for scraping Instagram user profiles. It allows you to fetch details such as bio, followers count, following count, and the number of posts from Instagram profiles..
 
 ## Installation
 
