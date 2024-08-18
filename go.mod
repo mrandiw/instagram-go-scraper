@@ -1,6 +1,6 @@
 module github.com/MrAndiw/instagram-go-scraper
 
-go 1.21
+go 1.22
 
 require (
 	github.com/chromedp/chromedp v0.10.0
