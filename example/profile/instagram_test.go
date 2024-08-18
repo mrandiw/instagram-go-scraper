@@ -16,7 +16,7 @@ func TestGetFullBio(t *testing.T) {
 
 	// Define expected values
 	expectedTitle := "𝑨𝒏𝒅𝒊 𝑾𝒊𝒃𝒐𝒘𝒐 (@mrandiw)"
-	expectedBio := "𝑆𝑜𝑓𝑡𝑤𝑎𝑟𝑒 𝐸𝑛𝑔𝑖𝑛𝑒𝑒𝑟 ➰"
+	expectedBio := "Tech Whiz 🚀 • Let's Innovate Together • #SoftwareEngineer"
 
 	// Validate results
 	if User.Title != expectedTitle {
